@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Praveen Kumar — Full-Stack Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --card: #16161f;
+    --border: #2a2a3a;
+    --accent: #6c63ff;
+    --accent2: #ff6584;
+    --accent3: #43e97b;
+    --text: #e8e8f0;
+    --muted: #7878a0;
+    --font-head: 'Syne', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+  [data-theme="light"] {
+    --bg: #f5f5fa;
+    --surface: #ffffff;
+    --card: #ebebf5;
+    --border: #d0d0e8;
+    --text: #1a1a2e;
+    --muted: #6060a0;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-mono);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0; opacity: .4;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.2rem 4rem;
+    background: rgba(10,10,15,.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: var(--font-head);
+    font-weight: 800; font-size: 1.3rem;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none;
+    font-size: .85rem; letter-spacing: .05em;
+    text-transform: uppercase;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  #theme-toggle {
+    background: var(--card); border: 1px solid var(--border);
+    color: var(--text); cursor: pointer;
+    padding: .4rem .8rem; border-radius: 6px;
+    font-family: var(--font-mono); font-size: .8rem;
+    transition: all .2s;
+  }
+  #theme-toggle:hover { border-color: var(--accent); }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 8rem 4rem 4rem;
+    position: relative;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem; align-items: center;
+    max-width: 1200px; margin: 0 auto; width: 100%;
+  }
+  .hero-tag {
+    font-size: .8rem; color: var(--accent3);
+    letter-spacing: .15em; text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  h1 {
+    font-family: var(--font-head);
+    font-size: clamp(2.8rem, 5vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    margin-bottom: 1rem;
+  }
+  .h1-accent { color: var(--accent); }
+  .typing-line {
+    font-size: 1.1rem; color: var(--muted);
+    min-height: 1.8em; margin-bottom: 2rem;
+  }
+  #typed { color: var(--accent2); }
+  #cursor {
+    display: inline-block;
+    width: 2px; height: 1.1em;
+    background: var(--accent2);
+    margin-left: 2px;
+    animation: blink .7s infinite;
+    vertical-align: text-bottom;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn {
+    padding: .75rem 1.75rem;
+    border-radius: 8px;
+    font-family: var(--font-mono);
+    font-size: .9rem; cursor: pointer;
+    text-decoration: none;
+    transition: all .25s;
+    display: inline-flex; align-items: center; gap: .5rem;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff; border: none;
+  }
+  .btn-primary:hover { background: #5a52e8; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(108,99,255,.4); }
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+  /* HERO VISUAL */
+  .hero-visual {
+    display: flex; justify-content: center; align-items: center;
+  }
+  .code-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    width: 100%; max-width: 420px;
+    font-size: .85rem;
+    box-shadow: 0 30px 60px rgba(0,0,0,.4);
+    position: relative;
+    animation: float 4s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+  .code-dots { display: flex; gap: .4rem; margin-bottom: 1rem; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-r { background: #ff5f57; }
+  .dot-y { background: #febc2e; }
+  .dot-g { background: #28c840; }
+  .code-line { margin: .3rem 0; }
+  .c-purple { color: #c792ea; }
+  .c-blue { color: #82aaff; }
+  .c-green { color: #c3e88d; }
+  .c-orange { color: #f78c6c; }
+  .c-muted { color: #546e7a; }
+  .c-white { color: #eeffff; }
+
+  /* SECTIONS */
+  section { padding: 6rem 4rem; position: relative; }
+  .section-inner { max-width: 1200px; margin: 0 auto; }
+  .section-label {
+    font-size: .75rem; color: var(--accent);
+    letter-spacing: .2em; text-transform: uppercase;
+    margin-bottom: .5rem;
+  }
+  h2 {
+    font-family: var(--font-head);
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 800; letter-spacing: -1.5px;
+    margin-bottom: 3rem;
+  }
+
+  /* ABOUT */
+  #about { background: var(--surface); }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 4rem; align-items: start;
+  }
+  .about-text p {
+    color: var(--muted); line-height: 1.9; margin-bottom: 1rem;
+    font-size: .95rem;
+  }
+  .about-text p span { color: var(--text); }
+  .stat-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1rem; margin-top: 1.5rem;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.2rem;
+    text-align: center;
+    transition: border-color .2s;
+  }
+  .stat-card:hover { border-color: var(--accent); }
+  .stat-num {
+    font-family: var(--font-head);
+    font-size: 2rem; font-weight: 800;
+    color: var(--accent);
+  }
+  .stat-label { font-size: .75rem; color: var(--muted); margin-top: .25rem; }
+
+  /* SKILLS */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .skill-group {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.5rem;
+    transition: all .25s;
+  }
+  .skill-group:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(108,99,255,.15);
+  }
+  .skill-group-title {
+    font-family: var(--font-head);
+    font-size: .9rem; font-weight: 700;
+    color: var(--accent); margin-bottom: 1rem;
+    display: flex; align-items: center; gap: .5rem;
+  }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .tag {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: .3rem .75rem;
+    border-radius: 100px;
+    font-size: .75rem;
+    transition: all .2s;
+  }
+  .tag:hover { color: var(--text); border-color: var(--accent); }
+
+  /* PROJECTS */
+  #projects { background: var(--surface); }
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+  }
+  .project-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 1.8rem;
+    transition: all .3s;
+    display: flex; flex-direction: column;
+  }
+  .project-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 50px rgba(108,99,255,.2);
+  }
+  .project-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; margin-bottom: 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+  }
+  .project-name {
+    font-family: var(--font-head);
+    font-size: 1.15rem; font-weight: 700;
+    margin-bottom: .5rem;
+  }
+  .project-desc { color: var(--muted); font-size: .88rem; line-height: 1.7; flex: 1; }
+  .project-stack { display: flex; flex-wrap: wrap; gap: .4rem; margin: 1rem 0; }
+  .stack-tag {
+    background: rgba(108,99,255,.15);
+    color: var(--accent);
+    padding: .2rem .6rem;
+    border-radius: 4px; font-size: .72rem;
+  }
+  .project-links { display: flex; gap: 1rem; }
+  .project-links a {
+    color: var(--muted); text-decoration: none;
+    font-size: .8rem;
+    display: flex; align-items: center; gap: .3rem;
+    transition: color .2s;
+  }
+  .project-links a:hover { color: var(--accent); }
+
+  /* CONTACT */
+  .contact-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4rem;
+    text-align: center;
+    max-width: 700px; margin: 0 auto;
+  }
+  .contact-box h2 { margin-bottom: 1rem; }
+  .contact-box p { color: var(--muted); margin-bottom: 2.5rem; line-height: 1.8; }
+  .contact-links { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+  .contact-chip {
+    display: flex; align-items: center; gap: .5rem;
+    background: var(--card); border: 1px solid var(--border);
+    color: var(--text); text-decoration: none;
+    padding: .7rem 1.4rem; border-radius: 100px;
+    font-size: .85rem; transition: all .25s;
+  }
+  .contact-chip:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+  /* FOOTER */
+  footer {
+    text-align: center; padding: 2rem 4rem;
+    border-top: 1px solid var(--border);
+    color: var(--muted); font-size: .8rem;
+  }
+
+  /* SCROLL ANIMATIONS */
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    #hero, section { padding: 5rem 1.5rem 3rem; }
+    .hero-grid, .about-grid { grid-template-columns: 1fr; }
+    .hero-visual { display: none; }
+    .contact-box { padding: 2rem; }
+  }
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-logo">PK.</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><button id="theme-toggle" onclick="toggleTheme()">☀ Light</button></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid">
+    <div>
+      <div class="hero-tag">// Available for internships</div>
+      <h1>Hi, I'm<br><span class="h1-accent">Praveen Kumar</span></h1>
+      <div class="typing-line">I build <span id="typed"></span><span id="cursor"></span></div>
+      <div class="hero-btns">
+        <a href="#projects" class="btn btn-primary">→ View Projects</a>
+        <a href="mailto:pk422775@gmail.com" class="btn btn-outline">✉ Contact Me</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="code-card">
+        <div class="code-dots">
+          <div class="dot dot-r"></div>
+          <div class="dot dot-y"></div>
+          <div class="dot dot-g"></div>
+        </div>
+        <div class="code-line"><span class="c-purple">const</span> <span class="c-blue">developer</span> <span class="c-white">= {</span></div>
+        <div class="code-line" style="padding-left:1.2rem"><span class="c-orange">name</span><span class="c-white">:</span> <span class="c-green">"Praveen Kumar"</span><span class="c-white">,</span></div>
+        <div class="code-line" style="padding-left:1.2rem"><span class="c-orange">role</span><span class="c-white">:</span> <span class="c-green">"Full-Stack Dev"</span><span class="c-white">,</span></div>
+        <div class="code-line" style="padding-left:1.2rem"><span class="c-orange">stack</span><span class="c-white">: [</span></div>
+        <div class="code-line" style="padding-left:2.4rem"><span class="c-green">"Next.js"</span><span class="c-white">,</span> <span class="c-green">"Node.js"</span><span class="c-white">,</span></div>
+        <div class="code-line" style="padding-left:2.4rem"><span class="c-green">"Java"</span><span class="c-white">,</span> <span class="c-green">"AWS"</span></div>
+        <div class="code-line" style="padding-left:1.2rem"><span class="c-white">],</span></div>
+        <div class="code-line" style="padding-left:1.2rem"><span class="c-orange">available</span><span class="c-white">:</span> <span class="c-purple">true</span></div>
+        <div class="code-line"><span class="c-white">}</span></div>
+        <br>
+        <div class="code-line"><span class="c-muted">// Currently @ HBTU Kanpur</span></div>
+        <div class="code-line"><span class="c-muted">// Graduating May 2027</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <div class="section-label">// Who am I</div>
+    <h2>About Me</h2>
+    <div class="about-grid reveal">
+      <div class="about-text">
+        <p>I'm a <span>B.Tech CSE student at HBTU Kanpur</span> (graduating 2027) who loves turning ideas into fast, production-ready applications.</p>
+        <p>I've built everything from a <span>real-time distributed chat app</span> (microservices + RabbitMQ + AWS EC2) to a <span>railway reservation system</span> — and I'm always learning what's next.</p>
+        <p>Outside of coding, I grind <span>DSA on LeetCode</span> and stay updated with modern fullstack patterns. I'm actively looking for <span>internships</span> where I can contribute and grow fast.</p>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-num">3+</div>
+          <div class="stat-label">Projects Built</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">6+</div>
+          <div class="stat-label">Tech Stacks</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">2027</div>
+          <div class="stat-label">Graduating</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">∞</div>
+          <div class="stat-label">Curiosity</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-inner">
+    <div class="section-label">// What I work with</div>
+    <h2>Skills</h2>
+    <div class="skills-grid reveal">
+      <div class="skill-group">
+        <div class="skill-group-title">⚡ Languages</div>
+        <div class="skill-tags">
+          <span class="tag">C++</span><span class="tag">Java</span><span class="tag">Python</span>
+          <span class="tag">JavaScript</span><span class="tag">TypeScript</span><span class="tag">SQL</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">🎨 Frontend</div>
+        <div class="skill-tags">
+          <span class="tag">Next.js</span><span class="tag">React.js</span><span class="tag">HTML5</span>
+          <span class="tag">CSS3</span><span class="tag">Bootstrap 5</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">🔧 Backend</div>
+        <div class="skill-tags">
+          <span class="tag">Node.js</span><span class="tag">REST APIs</span><span class="tag">Socket.IO</span>
+          <span class="tag">RabbitMQ</span><span class="tag">Spring Boot</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">🗄️ Database & Cache</div>
+        <div class="skill-tags">
+          <span class="tag">MySQL</span><span class="tag">MongoDB</span><span class="tag">Redis</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">☁️ Cloud & DevOps</div>
+        <div class="skill-tags">
+          <span class="tag">AWS EC2</span><span class="tag">GitHub Actions</span>
+          <span class="tag">GitHub Pages</span><span class="tag">Docker</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">🧠 CS Fundamentals</div>
+        <div class="skill-tags">
+          <span class="tag">DSA</span><span class="tag">OOPs</span><span class="tag">DBMS</span>
+          <span class="tag">OS</span><span class="tag">Computer Networks</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-inner">
+    <div class="section-label">// What I've built</div>
+    <h2>Projects</h2>
+    <div class="projects-grid reveal">
+
+      <div class="project-card">
+        <div class="project-icon">💬</div>
+        <div class="project-name">Real-Time Chat App</div>
+        <div class="project-desc">Distributed chat application using microservices architecture. Handles real-time messaging, async queuing, and Redis caching — deployed on AWS EC2 with ~30–40% improved retrieval speed.</div>
+        <div class="project-stack">
+          <span class="stack-tag">Next.js</span><span class="stack-tag">TypeScript</span>
+          <span class="stack-tag">Node.js</span><span class="stack-tag">RabbitMQ</span>
+          <span class="stack-tag">Redis</span><span class="stack-tag">AWS EC2</span>
+        </div>
+        <div class="project-links">
+          <a href="https://praveenkg02.github.io/chat-app.html" target="_blank">↗ Live Demo</a>
+          <a href="https://github.com/praveenkg02" target="_blank">⌥ GitHub</a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-icon">🌤️</div>
+        <div class="project-name">WeatherNow Dashboard</div>
+        <div class="project-desc">Live weather dashboard using OpenWeatherMap API. Search any city for real-time temperature, humidity, wind, UV index, and a 5-day forecast — fully responsive with dark/light mode.</div>
+        <div class="project-stack">
+          <span class="stack-tag">HTML</span><span class="stack-tag">CSS</span>
+          <span class="stack-tag">JavaScript</span><span class="stack-tag">REST API</span>
+        </div>
+        <div class="project-links">
+          <a href="https://praveenkg02.github.io/weathernow/" target="_blank">↗ Live Demo</a>
+          <a href="https://github.com/praveenkg02/weathernow" target="_blank">⌥ GitHub</a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-icon">🚂</div>
+        <div class="project-name">Smart Railway Reservation</div>
+        <div class="project-desc">Full-featured railway platform — passenger registration, train search, ticket booking & cancellation, PNR status. Backed by normalized MySQL DB with admin panel using OOP principles.</div>
+        <div class="project-stack">
+          <span class="stack-tag">Java</span><span class="stack-tag">MySQL</span>
+          <span class="stack-tag">JDBC</span><span class="stack-tag">OOP</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/praveenkg02" target="_blank">⌥ GitHub</a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-icon">⚡</div>
+        <div class="project-name">Spark Learning — Quiz Platform</div>
+        <div class="project-desc">Browser-based quiz app with timed multi-category questions, instant feedback, and session-based score tracking. Clean modular ES6+ JavaScript with fully responsive UI.</div>
+        <div class="project-stack">
+          <span class="stack-tag">HTML</span><span class="stack-tag">CSS</span>
+          <span class="stack-tag">JavaScript</span><span class="stack-tag">ES6+</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/praveenkg02" target="_blank">⌥ GitHub</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="contact-box reveal">
+      <div class="section-label">// Let's talk</div>
+      <h2>Get In Touch</h2>
+      <p>I'm actively looking for internship and entry-level opportunities.<br>If you have a role or just want to connect — my inbox is open.</p>
+      <div class="contact-links">
+        <a href="mailto:pk422775@gmail.com" class="contact-chip">✉ pk422775@gmail.com</a>
+        <a href="https://linkedin.com/in/praveen-kumar-2b0a83189" target="_blank" class="contact-chip">in LinkedIn</a>
+        <a href="https://github.com/praveenkg02" target="_blank" class="contact-chip">⌥ GitHub</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Built with ♥ by Praveen Kumar &nbsp;·&nbsp; 2024</p>
+</footer>
+
+<script>
+  // TYPING EFFECT
+  const phrases = [
+    "full-stack apps.",
+    "distributed systems.",
+    "real-time experiences.",
+    "clean, fast UIs.",
+    "scalable backends."
+  ];
+  let pi = 0, ci = 0, deleting = false;
+  const typed = document.getElementById('typed');
+  function type() {
+    const phrase = phrases[pi];
+    if (!deleting) {
+      typed.textContent = phrase.slice(0, ++ci);
+      if (ci === phrase.length) { deleting = true; setTimeout(type, 1800); return; }
+    } else {
+      typed.textContent = phrase.slice(0, --ci);
+      if (ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; }
+    }
+    setTimeout(type, deleting ? 50 : 90);
+  }
+  type();
+
+  // THEME TOGGLE
+  function toggleTheme() {
+    const body = document.body;
+    const btn = document.getElementById('theme-toggle');
+    if (body.getAttribute('data-theme') === 'light') {
+      body.removeAttribute('data-theme');
+      btn.textContent = '☀ Light';
+    } else {
+      body.setAttribute('data-theme', 'light');
+      btn.textContent = '🌙 Dark';
+    }
+  }
+
+  // SCROLL REVEAL
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
